@@ -32,7 +32,6 @@ async def handle_all_group_messages(client: BotClient, update: Update):
         if not message_text:
             return
         
-        # 3. تشخیص لینک (ساده‌تر)
         has_link = any(pattern in message_text.lower() 
                       for pattern in ['http://', 'https://', 't.me/', 'rubika.ir/', '@'])
         
@@ -62,14 +61,11 @@ async def handle_all_group_messages(client: BotClient, update: Update):
                         )
                         print(f"   ✅ کاربر حذف شد! نتیجه: {result}")
                     except Exception as ban_error:
-                        # تست با پارامترهای جایگزین
                         try:
-                            # شاید با object_guid کار کند
                             await client.ban_chat_member(
                                 object_guid=chat_guid,
                                 member_guid=user_guid
                             )
-                            print("   ✅ کاربر حذف شد (با object_guid)")
                         except:
                             pass
                 else:
