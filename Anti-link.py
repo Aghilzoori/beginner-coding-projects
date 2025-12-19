@@ -88,4 +88,3 @@ async def handle_all_group_messages(client: BotClient, update: Update):
 if __name__ == "__main__":
     print("🤖 ربات آنتی‌لینک فعال شد...")
     app.run()
-#
