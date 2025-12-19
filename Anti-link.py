@@ -1,5 +1,3 @@
-from rubpy.bot import BotClient, filters
-from rubpy.bot.models import Update
 import re
 import sys
 import subprocess
