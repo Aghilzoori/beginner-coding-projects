@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود</title>
+    <style>
+        body {
+            font-family: Tahoma;
+            text-align: center;
+            padding: 100px;
+            background: #f0f0f0;
+        }
+        .box {
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: block;
+            padding: 15px 40px;
+            margin: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        .admin-btn {
+            background: #e74c3c;
+        }
+        .student-btn {
+            background: #3498db;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🔐 انتخاب نوع کاربر</h1>
+        
+        <a href="/manager/" class="btn admin-btn">
+            👨‍💼 ورود مدیر
+        </a>
+        
+        <a href="/student/" class="btn student-btn">
+            👨‍🎓 ورود دانش‌آموز
+        </a>
+    </div>
+</body>
+</html>
