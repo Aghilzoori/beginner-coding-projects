@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 32px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .admin-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        .student-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-left: 10px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: right;
+            border: 1px solid #e9ecef;
+        }
+        
+        .info-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .info-box p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .info-box code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #d63384;
+        }
+        
+        .server-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🔐 انتخاب نوع کاربر</h1>
+        
+        <p class="description">
+            لطفاً بر اساس نقش خود در سیستم، یکی از گزینه‌های زیر را انتخاب کنید
+        </p>
+        
+        <!-- لینک اصلاح شده: از /users/ استفاده شده نه مسیر فایل سیستم -->
+        <a href="/users/" class="btn admin-btn">
+            <span class="icon">👨‍💼</span> ورود مدیر سیستم
+        </a>
+        
+        <a href="/student/" class="btn student-btn">
+            <span class="icon">👨‍🎓</span> ورود دانش‌آموز
+        </a>
+        
+        <div class="info-box">
+            <h3>📌 راهنمای آدرس‌دهی صحیح:</h3>
+            <p>✅ <strong>صحیح:</strong> <code>/users/</code> یا <code>http://localhost:8000/users/</code></p>
+            <p>❌ <strong>غلط:</strong> <code>/home/aghil/Desktop/django_test_1/users/</code></p>
+            <p>آدرس‌های وب با <code>/</code> شروع می‌شوند و مسیرهای فایل سیستم نیستند.</p>
+        </div>
+        
+        <div class="server-info">
+            <p>📡 سرور: <code>http://localhost:8000/</code></p>
+            <p>🕐 زمان: <span id="time"></span></p>
+        </div>
+    </div>
+    
+    <script>
+        // نمایش زمان فعلی
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fa-IR');
+            document.getElementById('time').textContent = timeString;
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // لاگ آدرس‌ها برای دیباگ
+        console.log('آدرس فعلی:', window.location.href);
+        console.log('لینک مدیر:', '/users/');
+        console.log('لینک دانش‌آموز:', '/student/');
+        
+        // نمایش پیام هنگام کلیک
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                console.log('کلیک شد:', this.href);
+                
+                // اگر هنوز صفحه student/ وجود ندارد، پیام نشان بده
+                if(this.href.includes('/student/')) {
+                    if(!confirm('صفحه دانش‌آموز هنوز ساخته نشده. می‌خواهید ادامه دهید؟')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

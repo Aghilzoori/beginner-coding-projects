@@ -1,0 +1,319 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود کاربر</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #1976D2;
+        }
+        
+        .btn-secondary {
+            background-color: #4CAF50;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #45a049;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>سیستم ثبت‌نام و ورود</h1>
+        
+        <div id="message" class="message hidden"></div>
+        
+        <div id="loginSection">
+            <h2>ورود کاربران ثبت‌نام کرده</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">نام کاربری</label>
+                    <input type="text" id="loginUsername" name="username" required>
+                </div>
+                
+                <button type="submit">بررسی و ورود</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                کاربر جدید هستید؟
+                <a href="javascript:void(0);" onclick="showRegister()">ثبت نام کنید</a>
+            </p>
+        </div>
+        
+        <div id="registerSection" class="hidden">
+            <h2>ثبت نام کاربر جدید</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">نام کاربری *</label>
+                    <input type="text" id="username" name="username" required>
+                    <small style="color: #666;">نام کاربری باید یکتا باشد</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullname">نام و نام خانوادگی *</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="province">استان *</label>
+                    <select id="province" name="province" required>
+                        <option value="">-- انتخاب استان --</option>
+                        <option value="تهران">تهران</option>
+                        <option value="اصفهان">اصفهان</option>
+                        <option value="خراسان رضوی">خراسان رضوی</option>
+                        <option value="فارس">فارس</option>
+                        <option value="آذربایجان شرقی">آذربایجان شرقی</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">شهرستان / شهر *</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="school">مدرسه *</label>
+                    <input type="text" id="school" name="school" required>
+                </div>
+                
+                <button type="submit" class="btn-secondary">ثبت نام</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                قبلاً ثبت نام کرده‌اید؟
+                <a href="javascript:void(0);" onclick="showLogin()">وارد شوید</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // توابع برای نمایش/پنهان کردن بخش‌ها
+        function showRegister() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.remove('hidden');
+            clearMessage();
+        }
+        
+        function showLogin() {
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            clearMessage();
+        }
+        
+        function showMessage(text, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.classList.remove('hidden');
+        }
+        
+        function clearMessage() {
+            document.getElementById('message').classList.add('hidden');
+        }
+        
+        // فرم لاگین
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            
+            if (!username) {
+                showMessage('لطفاً نام کاربری را وارد کنید', 'error');
+                return;
+            }
+            
+            fetch('/api/check_login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({username: username})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.user_exists) {
+                        showMessage(`خوش آمدید ${username}! می‌توانید وارد شوید.`, 'success');
+                        // اینجا می‌توانید کاربر رو به صفحه اصلی هدایت کنید
+                        // window.location.href = '/dashboard/';
+                    } else {
+                        showMessage('کاربر یافت نشد. لطفاً ثبت نام کنید.', 'info');
+                        showRegister();
+                    }
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('خطا در ارتباط با سرور', 'error');
+            });
+        });
+        
+        // فرم ثبت‌نام
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('username').value.trim(),
+                fullname: document.getElementById('fullname').value.trim(),
+                province: document.getElementById('province').value,
+                city: document.getElementById('city').value.trim(),
+                school: document.getElementById('school').value.trim()
+            };
+            
+            // اعتبارسنجی اولیه
+            if (!formData.username || !formData.fullname) {
+                showMessage('پر کردن فیلدهای ستاره‌دار الزامی است', 'error');
+                return;
+            }
+            
+            fetch('/api/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(`ثبت نام ${formData.username} با موفقیت انجام شد!`, 'success');
+                    this.reset();
+                    // پس از ۲ ثانیه به صفحه لاگین برگرد
+                    setTimeout(() => {
+                        showLogin();
+                        document.getElementById('loginUsername').value = formData.username;
+                    }, 2000);
+                } else {
+                    showMessage(data.message, 'error');
+                    // اگر خطای تکراری بودن بود، به کاربر اطلاع بده
+                    if (data.error_type === 'duplicate_username') {
+                        showLogin();
+                        document.getElementById('loginUsername').value = formData.username;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('خطا در ارتباط با سرور', 'error');
+            });
+        });
+        
+        // تابع برای دریافت توکن CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
