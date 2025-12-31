@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add / Update Profile</title>
+<style>
+body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    max-width: 400px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="text"], textarea {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+    transition: border 0.2s;
+}
+
+input:focus, textarea:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+button {
+    background: #667eea;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+}
+
+img.preview {
+    display: block;
+    max-width: 150px;
+    margin: 10px auto;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🖼️ Add / Update Profile for {{ friend.name }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="profile" value="{{ friend.profile }}" placeholder="Profile image URL (e.g., https://i.postimg.cc/xyz.jpg)">
+        <button type="submit">Save Profile</button>
+    </form>
+
+    {% if friend.profile %}
+        <img src="{{ friend.profile }}" alt="{{ friend.name }} Profile" class="preview">
+    {% endif %}
+
+    <a href="{% url 'friend_list' %}" class="back-link">← Back to Friends List</a>
+</div>
+</body>
+</html>

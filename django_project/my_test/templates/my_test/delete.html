@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Friend</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        strong {
+            color: #e63946;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #e63946;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #d62839;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            background: #adb5bd;
+            color: #fff;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        a:hover {
+            background: #868e96;
+        }
+
+        @media (max-width: 400px) {
+            form {
+                flex-direction: column;
+            }
+
+            button, a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Friend</h1>
+        <p>Are you sure you want to delete <strong>{{ friend.name }}</strong>?</p>
+
+        <form method="post" action="{% url 'delete_friend' friend.id %}">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'friend_list' %}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

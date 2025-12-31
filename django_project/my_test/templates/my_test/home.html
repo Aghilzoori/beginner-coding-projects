@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Friends List</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Segoe UI", Tahoma, sans-serif; background: linear-gradient(135deg,#667eea,#764ba2); min-height: 100vh; display:flex; justify-content:center; align-items:center; padding:30px; }
+.container { background:#fff; width:100%; max-width:800px; border-radius:16px; padding:30px; box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+h1 { text-align:center; margin-bottom:25px; color:#333;}
+ul { list-style:none; display:flex; flex-direction:column; gap:20px;}
+.friend-card { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; border-radius:12px; background:#f8f9fc; box-shadow:0 5px 15px rgba(0,0,0,0.05); transition:transform 0.2s, box-shadow 0.2s;}
+.friend-card:hover { transform:translateY(-3px); box-shadow:0 10px 25px rgba(0,0,0,0.1);}
+.friend-info { display:flex; flex-direction:column; gap:5px; }
+.friend-name { font-size:20px; font-weight:600; color:#333;}
+.friend-meta { font-size:14px; color:#555;}
+.friend-meta a { color:#667eea; text-decoration:none; font-weight:500;}
+.friend-meta a:hover { text-decoration:underline;}
+.button-group { display:flex; gap:10px; flex-wrap:wrap;}
+.add-btn, .delete-btn { padding:8px 14px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:500; transition:all 0.2s; cursor:pointer; border:none;}
+.add-btn { background:#667eea; color:#fff;}
+.add-btn:hover { opacity:0.9;}
+.delete-btn { background:#ff4d4f; color:#fff;}
+.delete-btn:hover { opacity:0.9;}
+.empty { text-align:center; color:#777; font-size:16px;}
+a.new-friend { display:block; margin-top:30px; text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:14px; border-radius:12px; text-decoration:none; font-size:16px; font-weight:500; transition:opacity 0.2s;}
+a.new-friend:hover { opacity:0.9;}
+img.profile-img { width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid #667eea;}
+@media(max-width:600px) { .friend-card{ flex-direction:column; align-items:flex-start; gap:10px;} .button-group{ width:100%; justify-content:flex-start;} .add-btn,.delete-btn{ width:auto;} }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>👥 Friends List</h1>
+<ul>
+{% for friend in friends %}
+<li class="friend-card">
+    <div class="friend-info">
+        <div class="friend-name">{{ friend.name }}</div>
+        <div class="friend-meta">
+            Age: {{ friend.age }} • City: {{ friend.city }}<br>
+            {% if friend.profile %}
+                <img src="{{ friend.profile }}" alt="{{ friend.name }} Profile" class="profile-img">
+            {% endif %}
+        </div>
+    </div>
+    <div class="button-group">
+        <a href="{% url 'delete_friend_page' friend.id %}" class="delete-btn">Delete Friend</a>
+        <a href="{% url 'add_profile' friend.id %}" class="add-btn">🖼️ Add/Update Profile</a>
+        {% if friend.profile %}
+        <form method="post" action="{% url 'delete_profile' friend.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">❌ Delete Profile</button>
+        </form>
+        {% endif %}
+    </div>
+</li>
+{% empty %}
+<li class="empty">No friends found 😢</li>
+{% endfor %}
+</ul>
+<a href="{% url 'add_friend' %}" class="new-friend">➕ Add a New Friend</a>
+</div>
+</body>
+</html>
