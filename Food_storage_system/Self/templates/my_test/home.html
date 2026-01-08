@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست دانشجویان</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<h2>🍽 برنامه غذایی</h2>
+
+<!-- 🔴 دکمه حذف همه غذاها -->
+<form method="post" action="{% url 'delete_food' %}" 
+      onsubmit="return confirm('⚠️ آیا مطمئنید همه برنامه‌های غذایی حذف شوند؟')" 
+      style="margin-bottom: 20px;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-delete" 
+            style="background: #dc3545; color: white; padding: 8px 15px; border: none; border-radius: 4px;">
+        🗑 حذف همه برنامه‌های غذایی
+    </button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>روز</th>
+            <th>صبحانه</th>
+            <th>ناهار</th>
+            <th>شام</th>
+            <th>قیمت کل</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in food %}
+        <tr>
+            <td>{{ item.get_day_display }}</td>
+            <td>{{ item.breakfast|default:"—" }}</td>
+            <td>{{ item.lunch|default:"—" }}</td>
+            <td>{{ item.dinner|default:"—" }}</td>
+            <td>{{ item.total_price|default:"—" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">برنامه غذایی ثبت نشده است</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="container">
+    <a href="{% url 'list_student' %}" class="btn btn-success">
+    👨‍🎓 لیست رزروهای دانشجویان
+</a>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>دانشجو</th>
+            <th>شماره دانشجویی</th>
+            <th>روز</th>
+            <th>غذا</th>
+            <th>قیمت</th>
+            <th>زمان رزرو</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reservations %}
+        <tr>
+            <td>{{ r.student.full_name }}</td>
+            <td>{{ r.student.number }}</td>
+            <td>{{ r.day }}</td>
+            <td>
+                {{ r.daily_food.lunch|default:"—" }}
+                {{ r.daily_food.dinner|default:"" }}
+            </td>
+            <td>{{ r.price }}</td>
+            <td>{{ r.created_at|date:"Y/m/d H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">هیچ رزروی ثبت نشده است</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    <h1>📚 لیست دانشجویان</h1>
+
+    <a href="{% url 'add_student' %}" class="btn btn-add">➕ افزودن دانشجو</a>
+    <a href="{% url 'add_food' %}" class="btn btn-add">🍽 افزودن برنامه غذا</a>
+    
+    <table>
+        <thead>
+        <tr>
+            <th>نام کامل</th>
+            <th>شماره</th>
+            <th>کد ملی</th>
+            <th>شماره شناسنامه</th>
+            <th>Inventory</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for friend in friends %}
+        <tr>
+            <td>{{ friend.full_name }}</td>
+            <td>{{ friend.number }}</td>
+            <td>{{ friend.national_code }}</td>
+            <td>{{ friend.ID_number }}</td>
+
+            <td>
+                {% if friend.Inventory %}
+                    {{ friend.Inventory }}
+                {% else %}
+                    <span class="empty">—</span>
+                {% endif %}
+            </td>
+
+            <td class="actions">
+                <a href="{% url 'add_Inventory' friend.id %}" class="btn btn-edit">✏️</a>
+
+                <form method="post" action="{% url 'delete_student' friend.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-delete" type="submit">🗑</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">دانشجویی ثبت نشده است</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تغییر Inventory</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="inventory-page">
+
+<div class="inventory-card">
+    <h2>📦 مدیریت Inventory</h2>
+
+    <p class="student-name">
+        دانشجو:
+        <span>{{ friend.full_name }}</span>
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>مقدار Inventory</label>
+        <input type="number" name="Inventory" placeholder="مثلاً 120" required>
+
+        <button class="btn btn-primary">💾 ذخیره</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">↩ بازگشت</a>
+    </form>
+</div>
+
+</body>
+</html>

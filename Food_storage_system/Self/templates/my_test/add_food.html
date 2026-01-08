@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>افزودن برنامه غذا</title>
+</head>
+<body>
+
+<h2>🍽 افزودن برنامه غذایی روزانه</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">💾 ذخیره</button>
+</form>
+
+<a href="{% url 'home' %}">⬅ بازگشت</a>
+
+</body>
+</html>

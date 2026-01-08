@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم رزرو غذا</title>
+
+    <style>
+        * {
+            font-family: Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            background: linear-gradient(135deg, #4a6bdf, #6c7cff);
+            color: #fff;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .balance {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        /* ===== Buttons ===== */
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            background: #4a6bdf;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        .btn-danger { background: #e74c3c; }
+        .btn-success { background: #2ecc71; }
+        .btn-purple { background: #9b59b6; }
+
+        /* ===== Card ===== */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #4a6bdf;
+        }
+
+        /* ===== Reservations ===== */
+        .reservation-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .reservation-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* ===== Table ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+
+        th {
+            background: #f9fafb;
+            color: #555;
+        }
+
+        /* ===== Info Grid ===== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .info-box span {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .info-box div {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            th, td { font-size: 13px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>👋 سلام {{ student.full_name }}</h1>
+        <p>شماره دانشجویی: {{ student.number|default:"-" }}</p>
+        <div class="balance">💰 موجودی: {{ student.Inventory|default:0 }} تومان</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+        <a href="{% url 'reservation' student.id %}" class="btn">📅 رزرو غذا</a>
+        <a href="#" class="btn btn-purple">💰 افزایش موجودی</a>
+        <a href="{% url 'login' %}" class="btn btn-danger">🚪 خروج</a>
+    </div>
+
+    <!-- Reservations -->
+    <div class="card">
+        <h2>🍽 غذاهای رزرو شده</h2>
+
+        {% if reservations %}
+            <ul class="reservation-list">
+                {% for r in reservations %}
+                    <li>
+                        📅 {{ r.day }} |
+                        💰 {{ r.price }} تومان |
+                        🕒 {{ r.created_at|date:"Y/m/d H:i" }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <form method="post" action="{% url 'delete_food' %}" style="margin-top:15px;">
+                {% csrf_token %}
+                <button class="btn btn-danger">🗑 حذف همه رزروها</button>
+            </form>
+        {% else %}
+            <p>رزروی ثبت نشده است.</p>
+        {% endif %}
+    </div>
+
+    <!-- Food Menu -->
+    <div class="card">
+        <h2>📋 منوی غذا</h2>
+
+        {% if foods %}
+        <table>
+            <thead>
+                <tr>
+                    <th>روز</th>
+                    <th>صبحانه</th>
+                    <th>ناهار</th>
+                    <th>شام</th>
+                    <th>قیمت</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for food in foods %}
+                <tr>
+                    <td>{{ food.get_day_display }}</td>
+                    <td>{{ food.breakfast|default:"-" }}</td>
+                    <td>{{ food.lunch|default:"-" }}</td>
+                    <td>{{ food.dinner|default:"-" }}</td>
+                    <td>{{ food.total_price }} تومان</td>
+                    <td>
+                        <a href="{% url 'reservation' student.id %}?day={{ food.day }}" class="btn btn-success">
+                            رزرو
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>غذایی ثبت نشده است.</p>
+        {% endif %}
+    </div>
+
+    <!-- Info -->
+    <div class="card">
+        <h2>📊 اطلاعات حساب</h2>
+        <div class="info-grid">
+            <div class="info-box">
+                <span>کد ملی</span>
+                <div>{{ student.national_code|default:"-" }}</div>
+            </div>
+            <div class="info-box">
+                <span>شماره شناسنامه</span>
+                <div>{{ student.ID_number|default:"-" }}</div>
+            </div>
+            <div class="info-box">
+                <span>تعداد رزروها</span>
+                <div>{{ reservations|length }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © سیستم رزرو غذا | پشتیبانی: ۰۲۱-۱۲۳۴۵۶۷۸
+    </div>
+
+</div>
+
+</body>
+</html>
